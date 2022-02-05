@@ -7,7 +7,8 @@ import Link from "next/link";
 import { useMoralis } from "react-moralis";
 
 export default function Home() {
-  const [value, onChange] = useState(new Date());
+  const [selectedDay, onChange] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState("")
 
   return (
     <>
@@ -25,11 +26,11 @@ export default function Home() {
     
 
           <div className="flex justify-evenly w-full">
-            <div>
-              <DayPicker value={value} onChange={onChange} />
-              <ConfirmationBox />
+            <div className="flex flex-col justify-between">
+              <DayPicker selectedDay={selectedDay} onChange={onChange} />
+              <ConfirmationBox selectedDay={selectedDay} selectedTime={selectedTime}/>
             </div>
-            <TimePicker value={value} />
+            <TimePicker selectedDay={selectedDay} setSelectedTime={setSelectedTime} />
           </div>
         </main>
       </div>

@@ -1,12 +1,18 @@
-import dayjs from 'dayjs';
-import BookingForm from './bookingform';
+import dayjs from "dayjs";
+import BookingForm from "./bookingform";
 
-export default function ConfirmationBox({ value }) {
+export default function ConfirmationBox({ selectedDay, selectedTime }) {
   return (
-    <div>
-      Hello please
-      
-      <BookingForm />
-    </div>
+    <>
+      {selectedTime && (
+        <div>
+          CONFIRM
+          {dayjs(selectedDay).format("dddd")},{" "}
+          {dayjs(selectedDay).format("MMMM")} {dayjs(selectedDay).format("D")} @{" "}
+          {dayjs(selectedTime).format("H")}:{dayjs(selectedTime).format("mm")}
+          <BookingForm />
+        </div>
+      )}
+    </>
   );
 }
