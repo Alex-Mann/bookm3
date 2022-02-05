@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import { useState } from 'react'
 import { useMoralis } from 'react-moralis'
 import DayPicker from '../src/components/daypicker'
@@ -83,15 +84,16 @@ export function LoginButton() {
         onMouseOut={() => toggleDropdown(false)}
       >
         <div class="py-1" role="none">
-          <a
-            href="#"
-            class="text-gray-700 block px-4 py-2 text-sm"
-            role="menuitem"
-            tabindex="-1"
-            id="menu-item-0"
-          >
-            Account settings
-          </a>
+          <Link href="/playground">
+            <a
+              class="text-gray-700 block px-4 py-2 text-sm"
+              role="menuitem"
+              tabindex="-1"
+              id="menu-item-0"
+            >
+              Account settings
+            </a>
+          </Link>
           <button
             type="submit"
             class="text-gray-700 block w-full text-left px-4 py-2 text-sm"
