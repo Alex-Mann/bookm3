@@ -8,6 +8,7 @@ module.exports = {
   ],
   theme: {
     extend: {fontFamily: {
+      //sans: ['M PLUS 1p', ...defaultTheme.fontFamily.sans],
       sans: ["IBM Plex Mono", ...defaultTheme.fontFamily.sans],
     },},
   },

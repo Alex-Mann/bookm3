@@ -1,7 +1,12 @@
-import Head from 'next/head'
-import DayPicker from '../src/components/daypicker'
+import { useState } from "react";
+import Head from "next/head";
+import DayPicker from "../src/components/daypicker";
+import TimePicker from "../src/components/timepicker";
+import ConfirmationBox from "../src/components/confirmationbox";
 
 export default function Home() {
+  const [value, onChange] = useState(new Date());
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <Head>
@@ -10,17 +15,15 @@ export default function Home() {
       </Head>
 
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+        <div className="flex justify-evenly w-full">
+          <div >
 
-        <DayPicker />
+          <DayPicker value={value} onChange={onChange} />
+          <ConfirmationBox />
+          </div>
+          <TimePicker value={value}/>
+        </div>
       </main>
-
-
     </div>
-  )
+  );
 }

@@ -1,12 +1,9 @@
-import { useState } from "react";
 import Calendar from "react-calendar";
 
-export default function DayPicker() {
-  const [value, onChange] = useState(new Date());
+export default function DayPicker({value, onChange}) {
 
   return (
     <div>
-      {JSON.stringify(value)}
       <Calendar
         onChange={onChange}
         value={value}
