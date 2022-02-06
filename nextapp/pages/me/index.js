@@ -26,7 +26,9 @@ export default function Me() {
   return (
     <>
       <Nav></Nav>
-      <div className="flex flex-col items-center justify-center mt-20 py-2">
+      {isAuthenticated ? (
+        
+        <div className="flex flex-col items-center justify-center mt-20 py-2">
         <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
           <div className="flex justify-evenly w-full">
             <div className="flex flex-col">
@@ -67,7 +69,13 @@ export default function Me() {
                   </div>
                   <div>
                     {!dayjs().isBefore(selectedMeeting.get("meetingTime")) && (
-                      <div>Meeting Complete 😏</div>
+<div className="flex flex-col pt-8">
+  <button className="bg-[#B4AAD0] text-white font-bold hover:bg-[#d1b9dc] transition-colors ">return</button>
+  or
+  <button className="bg-[#B4AAD0] text-white font-bold hover:bg-[#d1b9dc] transition-colors">burn</button>
+</div>
+
+
                     )}
                   </div>
                 </>
@@ -78,6 +86,12 @@ export default function Me() {
           </div>
         </main>
       </div>
+        ):(
+          <div className="login__shadow absolute bottom-1/2 text-3xl text-white font-bold bg-[#222] w-full text-center">
+            pls login
+          </div>
+        )}
+        
     </>
   );
 }

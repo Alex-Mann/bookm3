@@ -63,13 +63,13 @@ export function TimeSlot(props) {
   return (
     <button
       onClick={props.onClick}
-      className={`${
+      className={`button__box ${
         `${dayjs(props.selectedTime).format("hh")}:${dayjs(
           props.selectedTime
         ).format("mm")}${dayjs(props.selectedTime).format("a")}` ===
         props.children[2]
-          ? "button__box__selected"
-          : "button__box"
+          ? "before:!bg-[#B4AAD0]"
+          : ""
       }`}
     >
       {props.children}
