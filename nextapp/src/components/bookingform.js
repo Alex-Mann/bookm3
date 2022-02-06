@@ -35,7 +35,7 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const signerAddress = await signer.getAddress();
-    const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
+    const bookingContract = new ethers.Contract('0xA39fF5b067c5BA5c117F780745C130312092a5C6', Bookm3ActualABI, signer);
     const bookTx = await bookingContract.book(signerAddress, ethers.BigNumber.from(endtime), {value: ethers.utils.parseEther('0.001')});
     await bookTx.wait();
 

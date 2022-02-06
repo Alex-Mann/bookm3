@@ -27,7 +27,7 @@ export default function Me() {
     console.log(endtime);
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
-    const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
+    const bookingContract = new ethers.Contract('0xA39fF5b067c5BA5c117F780745C130312092a5C6', Bookm3ActualABI, signer);
     const bookTx = await bookingContract.returnFunds(bookerAddress, ethers.BigNumber.from(endtime));
     await bookTx.wait();
   };
@@ -45,7 +45,7 @@ export default function Me() {
     console.log(endtime);
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
-    const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
+    const bookingContract = new ethers.Contract('0xA39fF5b067c5BA5c117F780745C130312092a5C6', Bookm3ActualABI, signer);
     const bookTx = await bookingContract.burn("0x000000000000000000000000000000000000dEaD", bookerAddress, ethers.BigNumber.from(endtime));
     await bookTx.wait();
 
