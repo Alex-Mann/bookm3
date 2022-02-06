@@ -2,11 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Ownable } from "./Ownable";
-export type { ConditionalEscrow } from "./ConditionalEscrow";
-export type { Escrow } from "./Escrow";
 export type { Bookm3 } from "./Bookm3";
 
 export { Ownable__factory } from "./factories/Ownable__factory";
-export { ConditionalEscrow__factory } from "./factories/ConditionalEscrow__factory";
-export { Escrow__factory } from "./factories/Escrow__factory";
 export { Bookm3__factory } from "./factories/Bookm3__factory";

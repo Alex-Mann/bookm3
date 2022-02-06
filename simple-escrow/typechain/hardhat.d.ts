@@ -17,14 +17,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
-      name: "ConditionalEscrow",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ConditionalEscrow__factory>;
-    getContractFactory(
-      name: "Escrow",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Escrow__factory>;
-    getContractFactory(
       name: "Bookm3",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Bookm3__factory>;
@@ -34,16 +26,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Ownable>;
-    getContractAt(
-      name: "ConditionalEscrow",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ConditionalEscrow>;
-    getContractAt(
-      name: "Escrow",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Escrow>;
     getContractAt(
       name: "Bookm3",
       address: string,

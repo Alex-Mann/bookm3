@@ -1,19 +1,19 @@
 import { ethers } from "hardhat";
 
+// Deploy to polygon with
+// npx hardhat run scripts/deploy.ts --network matic
 async function main() {
 	const [deployer] = await ethers.getSigners();
-  // We get the contract to deploy
-  const Escrow = await ethers.getContractFactory("RefundEscrow");
-  const escrow = await Escrow.deploy(await deployer.getAddress());
 
-  await escrow.deployed();
-
-  console.log("Escrow deployed to:", escrow.address);
+	const Bookm3 = await ethers.getContractFactory("Bookm3");
+	const booking = await Bookm3.deploy();
+	await booking.deployed();
+	console.log("Escrow deployed to:", booking.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+	console.error(error);
+	process.exitCode = 1;
 });
