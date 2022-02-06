@@ -12,7 +12,7 @@ export default function Me() {
 
   const upcomingMeetings = data
     .filter((d) => d.get("status") === "PENDING")
-    .filter((d) => d.get("acceptingUser") === user.get("ethAddress"))
+    .filter((d) => d.get("acceptingUser") === isAuthenticated ? user.get("ethAddress") : '')
     .filter((d) => dayjs().isBefore(d.get("meetingTime")))
     .sort(
       (a, b) =>
@@ -21,13 +21,12 @@ export default function Me() {
 
   const prevMeetings = data
     .filter((d) => d.get("status") === "COMPLETE")
-    .filter((d) => d.get("acceptingUser") === user.get("ethAddress"))
+    .filter((d) => d.get("acceptingUser") ===  isAuthenticated ? user.get("ethAddress") : "")
     .filter((d) => dayjs().isAfter(d.get("meetingTime")));
 
   return (
     <>
       <Nav></Nav>
-      {console.log(upcomingMeetings)}
       {isAuthenticated ? (
         <div className="flex flex-col items-center justify-center mt-20 py-2">
           <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
