@@ -10,7 +10,7 @@ export default function ConfirmationBox({ selectedDay, selectedTime }) {
           {dayjs(selectedDay).format("dddd")},{" "}
           {dayjs(selectedDay).format("MMMM")} {dayjs(selectedDay).format("D")} @{" "}
           {dayjs(selectedTime).format("H")}:{dayjs(selectedTime).format("mm")}
-          <BookingForm selectedDay={selectedDay} selectedTime={selectedTime} acptUser={'0xflaslkdfjsdlkfsflksadfjksjdf'}/>
+          <BookingForm selectedDay={selectedDay} selectedTime={selectedTime} acptUser={'0xc25fafac26287c844714648170a999313376a4e8'}/>
         </div>
       )}
     </>

@@ -27,6 +27,7 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
       notes: data.Notes,
       reqUser: user,
       acptUser: acptUser,
+      // TODO: add a field for the chain payload
     })
     console.log('data', data)
     console.log('time', selectedTime)
