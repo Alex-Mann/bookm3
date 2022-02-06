@@ -11,7 +11,7 @@ import { formatAddr } from "../utils";
 export default function Booking() {
   const [selectedDay, onChange] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
-  const [validURL, setValidURL] = useState(false);
+  const [validURL, setValidURL] = useState(true);
   const { isAuthenticated } = useMoralis();
   const router = useRouter();
   const {
@@ -26,8 +26,8 @@ export default function Booking() {
     }
 
     console.log(`ID: ${id}`);
-    if (id.includes("0x")) {
-      setValidURL(true);
+    if (!id.includes("0x")) {
+      setValidURL(false);
     }
   }, [isReady]);
 
