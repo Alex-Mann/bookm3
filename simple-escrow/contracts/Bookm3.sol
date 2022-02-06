@@ -38,7 +38,7 @@ contract Bookm3 is Ownable {
 		return _bookings[_hashBooking(payee, endtime)].amountGwei;
 	}
 
-	function book(address payee, uint256 endtime) public payable virtual onlyOwner {
+	function book(address payee, uint256 endtime) public payable virtual {
 		uint256 amount = msg.value;
 		_bookings[_hashBooking(payee, endtime)] = Booking(amount, endtime, false);
 		emit Booked(payee, endtime, amount);
