@@ -38,6 +38,7 @@ export default function Home() {
               </div>
               <TimePicker
                 selectedDay={selectedDay}
+                selectedTime={selectedTime}
                 setSelectedTime={setSelectedTime}
               />
             </div>
