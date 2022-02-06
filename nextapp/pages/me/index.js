@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useMoralisQuery, useMoralis } from "react-moralis";
 import Nav from "../../src/components/nav";
@@ -8,11 +8,20 @@ import { formatAddr } from "../../utils";
 export default function Me() {
   const { data, error, isLoading } = useMoralisQuery("UserSchedule");
   const [selectedMeeting, setSelectedMeeting] = useState(null);
+  const [valid, setValid] = useState("")
   const { isAuthenticated, user } = useMoralis();
+
+  useEffect(() => {
+    if(user) {
+
+      setValid(user.get("ethAddress"))
+      console.log("dont fry my copmputer")
+    }
+  }, [user]);
 
   const upcomingMeetings = data
     .filter((d) => d.get("status") === "PENDING")
-    .filter((d) => d.get("acceptingUser") === isAuthenticated ? user.get("ethAddress") : '')
+    .filter((d) => d.get("acceptingUser") === valid)
     .filter((d) => dayjs().isBefore(d.get("meetingTime")))
     .sort(
       (a, b) =>
@@ -21,14 +30,15 @@ export default function Me() {
 
   const prevMeetings = data
     .filter((d) => d.get("status") === "COMPLETE")
-    .filter((d) => d.get("acceptingUser") ===  isAuthenticated ? user.get("ethAddress") : "")
+    .filter((d) => d.get("acceptingUser") === valid)
     .filter((d) => dayjs().isAfter(d.get("meetingTime")));
 
   return (
     <>
       <Nav></Nav>
+{console.log(valid)}
       {isAuthenticated ? (
-        <div className="flex flex-col items-center justify-center mt-20 py-2">
+        <div className={`flex flex-col items-center justify-center mt-20 py-2 ${!isAuthenticated && "hidden"}`}>
           <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
             <div className="flex justify-evenly w-full">
               <div className="flex flex-col">
@@ -60,12 +70,7 @@ export default function Me() {
                         Name:{" "}
                         {selectedMeeting.get("name") || "No name available"}
                       </div>
-                      <div>
-                        Requestor:{" "}
-                        {selectedMeeting
-                          .get("requestingUser")
-                          .get("ethAddress")}
-                      </div>
+
                       <div>Notes: {selectedMeeting.get("notes")}</div>
                       <div>Fee: 0.003 Eth (**TODO**)</div>
                       <div>
