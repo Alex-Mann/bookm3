@@ -51,7 +51,7 @@ describe("Escrow", function () {
 		expect(parse(await addr1.getBalance())).to.be.above(parse(originalBalance) - 0.1);
 	});
 
-	it("Should be not be able to get funds out of escrow before time delay", async function () {
+	it("Should not be able to get funds out of escrow before time delay", async function () {
 		const originalBalance = await addr1.getBalance()
 		const currentTime = Math.floor(Date.now() / 1000);
 		const endtime = currentTime + 200;
@@ -82,6 +82,33 @@ describe("Escrow", function () {
 
 		await bookingOriginal.release(addr1Address, endtime);
 		await booking.refund(addr1Address, endtime);
+		expect(parse(await addr1.getBalance())).to.be.above(parse(originalBalance) - 0.1);
+	});
+	it("Should not be able to get funds out of escrow after burn", async function () {
+		const originalBalance = await addr1.getBalance()
+		const currentTime = Math.floor(Date.now() / 1000);
+		const endtime = currentTime + 1;
+		const bookTx = await booking.book(addr1Address, endtime, {value: ethers.utils.parseEther('0.1')});
+		await bookTx.wait();
+
+		expect(parse(await addr1.getBalance())).to.be.below(parse(originalBalance) - 0.1);
+
+		await bookingOriginal.burn("0x000000000000000000000000000000000000dEaD", addr1Address, endtime);
+		await new Promise(r => setTimeout(r, 1200));
+		await booking.refund(addr1Address, endtime);
+		expect(parse(await addr1.getBalance())).to.be.below(parse(originalBalance) - 0.1);
+	});
+
+	it("Should be able to get funds out of escrow anytime with returnFunds", async function () {
+		const originalBalance = await addr1.getBalance()
+		const currentTime = Math.floor(Date.now() / 1000);
+		const endtime = currentTime + 200;
+		const bookTx = await booking.book(addr1Address, endtime, {value: ethers.utils.parseEther('0.1')});
+		await bookTx.wait();
+
+		expect(parse(await addr1.getBalance())).to.be.below(parse(originalBalance) - 0.1);
+
+		await bookingOriginal.returnFunds(addr1Address, endtime);
 		expect(parse(await addr1.getBalance())).to.be.above(parse(originalBalance) - 0.1);
 	});
 });

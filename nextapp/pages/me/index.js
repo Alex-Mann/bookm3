@@ -28,10 +28,8 @@ export default function Me() {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
-    const bookTx = await bookingContract.release(bookerAddress, ethers.BigNumber.from(endtime));
+    const bookTx = await bookingContract.returnFunds(bookerAddress, ethers.BigNumber.from(endtime));
     await bookTx.wait();
-    const refundTx = await bookingContract.refund(bookerAddress, ethers.BigNumber.from(endtime));
-    await refundTx.wait();
   };
 
   const burn = async (selectedTime, bookerAddress) => {

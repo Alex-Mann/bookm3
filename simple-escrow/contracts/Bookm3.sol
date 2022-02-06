@@ -69,6 +69,19 @@ contract Bookm3 is Ownable {
 		emit Refunded(payee, booking.amountGwei);
 	}
 
+  /* The owner can refund at any time
+   */
+	function returnFunds(address payable payee, uint256 endtime) public virtual onlyOwner {
+		bytes32 index = _hashBooking(payee, endtime);
+		Booking memory booking = _bookings[index];
+
+		_bookings[index] = Booking(0, 0, false);
+
+		payee.sendValue(booking.amountGwei);
+
+		emit Refunded(payee, booking.amountGwei);
+	}
+
 	function burn(address payable notBribe, address payable payee, uint256 endtime) public virtual {
 		bytes32 index = _hashBooking(payee, endtime);
 		Booking memory booking = _bookings[index];
