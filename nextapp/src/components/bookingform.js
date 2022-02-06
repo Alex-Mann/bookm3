@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { ethers } from 'ethers';
-import Bookm3ABI from '../../../simple-escrow/artifacts/contracts/Bookm3.sol/Bookm3.json';
+import Bookm3ABI from '../../static/Bookm3.json';
 
 
 import { requestBooking } from '../models/UserSchedule'
