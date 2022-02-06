@@ -28,15 +28,19 @@ export default function TimePicker({ selectedDay, setSelectedTime }) {
       </div>
       {avail.map((c, idx) => {
         return (
-          <button
-            onClick={() => setSelectedTime(c)}
-            key={idx}
-            className="button__box"
-          >
-            {dayjs(c).format("H")}:{dayjs(c).format("mm")}
-          </button>
+          <TimeSlot key={idx} onClick={() => setSelectedTime(c)}>
+            {dayjs(c).format("hh:mma")}
+          </TimeSlot>
         );
       })}
     </div>
+  );
+}
+
+export function TimeSlot(props) {
+  return (
+    <button onClick={props.onClick} className="button__box">
+      {props.children}
+    </button>
   );
 }

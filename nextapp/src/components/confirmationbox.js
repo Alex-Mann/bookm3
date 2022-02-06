@@ -10,15 +10,17 @@ export default function ConfirmationBox({ selectedDay, selectedTime, id }) {
             {" "}
             <div className="details__title">Confirm Event Details</div>
             <div className="font-normal mb-2">
-              30 Minute Meeting<br/>
+              30 Minute Meeting
+              <br />
               {dayjs(selectedDay).format("dddd")},{" "}
               {dayjs(selectedDay).format("MMMM")}{" "}
               {dayjs(selectedDay).format("D")} @{" "}
               {dayjs(selectedTime).format("H")}:
-              {dayjs(selectedTime).format("mm")} EST<br/>
-              with<br/>
+              {dayjs(selectedTime).format("mm")} EST
+              <br />
+              with
+              <br />
               {id.substring(0, 8)}...
-
             </div>
           </div>
 
