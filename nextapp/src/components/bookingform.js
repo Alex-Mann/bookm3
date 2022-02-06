@@ -1,6 +1,10 @@
+import dayjs from 'dayjs'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useMoralis } from 'react-moralis'
+import { ethers } from 'ethers';
+import Bookm3ABI from '../../../simple-escrow/artifacts/contracts/Bookm3.sol/Bookm3.json';
+
 
 import { requestBooking } from '../models/UserSchedule'
 
@@ -10,16 +14,29 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { user } = useMoralis()
+  const { account, user, enableWeb3, web3, isWeb3Enabled } = useMoralis()
+  const Bookm3ActualABI = Bookm3ABI.abi;
 
   const onSubmit = async (data) => {
-    /* TODO:
-     *  need to handle the chain transaction here/store the chain payload
-     *  could also look up the address for the other user and then store payload as a pointer instead of a string
-     */
+    let provider = null;
+    if (isWeb3Enabled) {
+      provider = web3;
+    }
+    else {
+      provider = await enableWeb3();
+    }
+
+    const durationSec = 30 * 60;
+    const endtime = dayjs(selectedTime).unix() + durationSec;
+    const signer = provider.getSigner();
+    const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
+    const bookTx = await bookingContract.book(account, ethers.BigNumber.from(endtime), {value: ethers.utils.parseEther('0.001')});
+    await bookTx.wait();
+
+    // Chain stuff can be referenced by meetingTime + duration as well as the address of the meeter
     await requestBooking({
       meetingTime: selectedTime,
-      duration: null,
+      duration: durationSec,
       status: null,
       name: data.Name,
       email: data.Email,
@@ -27,6 +44,7 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
       reqUser: user,
       acptUser: acptUser,
       // TODO: add a field for the chain payload
+      // chainPayload: account,
     })
     console.log('data', data)
     console.log('time', selectedTime)

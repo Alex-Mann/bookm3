@@ -52,6 +52,8 @@ contract Bookm3 is Ownable {
 
 	/* Watch out, this is vulnerable to a re-entrancy attack
 	 * Must be called only by the owner, don't allow anyone else to specify target
+	 * (I think the re-entrancy only affects the gas fees which are forwarded to pay for the
+	 * transfer to the payee, since this is only ever called by the payee, the risk is low)
 	 */
 	function refund(address payable payee, uint256 endtime) public virtual {
 		bytes32 index = _hashBooking(payee, endtime);
