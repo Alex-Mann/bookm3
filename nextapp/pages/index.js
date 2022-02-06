@@ -13,13 +13,17 @@ export default function Home() {
   const { isAuthenticated } = useMoralis();
 
   return (
-    <>
+    <div
+      className={`min-h-screen ${
+        !isAuthenticated && "bg-login bg-cover bg-center overflow-hidden"
+      }`}
+    >
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Nav></Nav>
-      <div className="flex flex-col items-center justify-center min-h-screen py-2">
+      <Nav isAuthenticated={isAuthenticated}/>
+      <div className="flex flex-col items-center justify-center py-2">
         {isAuthenticated ? (
           <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
             <CopyURL />
@@ -38,9 +42,11 @@ export default function Home() {
             </div>
           </main>
         ) : (
-          <div>pls login</div>
+          <div className="login__shadow absolute bottom-1/2 text-3xl text-white font-bold">
+            pls login
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

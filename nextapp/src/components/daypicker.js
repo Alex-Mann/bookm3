@@ -2,7 +2,7 @@ import Calendar from "react-calendar";
 
 export default function DayPicker({ selectedDay, onChange }) {
   return (
-    <div>
+    <div className="mt-6">
       <Calendar
         onChange={onChange}
         selectedDay={selectedDay}

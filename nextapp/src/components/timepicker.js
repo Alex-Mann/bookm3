@@ -22,8 +22,10 @@ import dayjs from "dayjs";
 export default function TimePicker({ selectedDay, setSelectedTime }) {
   return (
     <div>
-      {dayjs(selectedDay).format("dddd")}, {dayjs(selectedDay).format("MMMM")}{" "}
-      {dayjs(selectedDay).format("D")}
+      <div className="font-bold">
+        {dayjs(selectedDay).format("dddd")}, {dayjs(selectedDay).format("MMMM")}{" "}
+        {dayjs(selectedDay).format("D")}
+      </div>
       {avail.map((c, idx) => {
         return (
           <button

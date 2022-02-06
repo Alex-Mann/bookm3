@@ -8,7 +8,7 @@ export function LoginButton() {
 
   if (!isAuthenticated) {
     return (
-      <div className="nav-item" onClick={() => authenticate()}>
+      <div className="nav-item cursor-pointer" onClick={() => authenticate()}>
         Login
       </div>
     )
