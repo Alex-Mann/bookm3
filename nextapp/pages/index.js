@@ -5,6 +5,7 @@ import TimePicker from "../src/components/timepicker";
 import ConfirmationBox from "../src/components/confirmationbox";
 import { useMoralis } from "react-moralis";
 import CopyURL from "../src/components/copyURL";
+import Nav from "../src/components/nav";
 
 export default function Home() {
   const [selectedDay, onChange] = useState(new Date());
