@@ -3,7 +3,7 @@ import { useMoralis } from "react-moralis";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export default function CopyURL() {
-  const { authenticate, isAuthenticated, user, logout } = useMoralis();
+  const { user } = useMoralis();
   const [isDropdownOpen, toggleDropdown] = useState(false);
   const [copied, setCopied] = useState(false);
 
