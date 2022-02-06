@@ -1,6 +1,5 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import dayjs from 'dayjs'
 import { useMoralis } from 'react-moralis'
 
 import { requestBooking } from '../models/UserSchedule'

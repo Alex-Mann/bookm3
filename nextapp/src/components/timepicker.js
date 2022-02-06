@@ -1,40 +1,57 @@
+import dayjs from 'dayjs'
+import { useMoralisQuery } from 'react-moralis'
+
 const avail = [
-  "2022-02-11T14:00:00.000Z",
-  "2022-02-11T14:30:00.000Z",
-  "2022-02-11T15:00:00.000Z",
-  "2022-02-11T15:30:00.000Z",
-  "2022-02-11T16:00:00.000Z",
-  "2022-02-11T16:30:00.000Z",
-  "2022-02-11T17:00:00.000Z",
-  "2022-02-11T17:30:00.000Z",
-  "2022-02-11T18:00:00.000Z",
-  "2022-02-11T18:30:00.000Z",
-  "2022-02-11T19:00:00.000Z",
-  "2022-02-11T19:30:00.000Z",
-  "2022-02-11T20:00:00.000Z",
-  "2022-02-11T20:30:00.000Z",
-  "2022-02-11T21:00:00.000Z",
-  "2022-02-11T21:30:00.000Z",
-];
+  'T14:00:00.000Z',
+  'T14:30:00.000Z',
+  'T15:00:00.000Z',
+  'T15:30:00.000Z',
+  'T16:00:00.000Z',
+  'T16:30:00.000Z',
+  'T17:00:00.000Z',
+  'T17:30:00.000Z',
+  'T18:00:00.000Z',
+  'T18:30:00.000Z',
+  'T19:00:00.000Z',
+  'T19:30:00.000Z',
+  'T20:00:00.000Z',
+  'T20:30:00.000Z',
+  'T21:00:00.000Z',
+  'T21:30:00.000Z',
+]
 
-import dayjs from "dayjs";
-
-export default function TimePicker({ selectedDay, setSelectedTime }) {
+export default function TimePicker({
+  selectedDay,
+  setSelectedTime,
+  acceptingUser,
+}) {
+  const { data, error, isLoading } = useMoralisQuery('UserSchedule')
+  const pendingConflicts = data
+    .filter((d) => d.get('status') === 'PENDING')
+    .filter((d) => d.get('acceptingUser') === acceptingUser)
+    .map((d) => dayjs(d.get('meetingTime')).toISOString())
+  const confirmedConflicts = data
+    .filter((d) => d.get('status') === 'CONFIRMED')
+    .filter((d) => d.get('acceptingUser') === acceptingUser)
+    .map((d) => dayjs(d.get('meetingTime')).toISOString())
   return (
     <div>
       <div className="font-bold">
-        {dayjs(selectedDay).format("dddd")}, {dayjs(selectedDay).format("MMMM")}{" "}
-        {dayjs(selectedDay).format("D")}
+        {dayjs(selectedDay).format('dddd')}, {dayjs(selectedDay).format('MMMM')}{' '}
+        {dayjs(selectedDay).format('D')}
       </div>
       {avail.map((c, idx) => {
+        c = `${dayjs(selectedDay).format('YYYY-MM-DD')}${c}`
         return (
           <TimeSlot key={idx} onClick={() => setSelectedTime(c)}>
-            {dayjs(c).format("hh:mma")}
+            {pendingConflicts.includes(c) && 'potentch conflict '}
+            {confirmedConflicts.includes(c) && 'hard conflict '}
+            {dayjs(c).format('hh:mma')}
           </TimeSlot>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 export function TimeSlot(props) {
@@ -42,5 +59,5 @@ export function TimeSlot(props) {
     <button onClick={props.onClick} className="button__box">
       {props.children}
     </button>
-  );
+  )
 }
