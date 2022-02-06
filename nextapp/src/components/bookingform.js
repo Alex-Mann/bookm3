@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
-import React from 'react'
+import { useEffect } from 'react'
+import { useMoralis } from "react-moralis";
 import { useForm } from 'react-hook-form'
 import { ethers } from 'ethers';
 import Bookm3ABI from '../../static/Bookm3.json';
@@ -14,6 +15,13 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
     formState: { errors },
   } = useForm()
   const Bookm3ActualABI = Bookm3ABI.abi;
+  const { authenticate, isAuthenticated, isAuthenticating, user } = useMoralis();
+
+  useEffect(async () => {
+    if (!isAuthenticated && !isAuthenticating) {
+      await authenticate();
+    }
+  }, [acptUser]);
 
   const onSubmit = async (data) => {
     const { ethereum } = window;
@@ -39,7 +47,7 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
       name: data.Name,
       email: data.Email,
       notes: data.Notes,
-      reqUser: signerAddress,
+      reqUser: user,
       acptUser: acptUser,
     })
     console.log('data', data)
