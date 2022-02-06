@@ -24,6 +24,7 @@ contract Bookm3 is Ownable {
 
 	event Booked(address indexed payee, uint256 endtime, uint256 weiAmount);
 	event Refunded(address indexed payee, uint256 weiAmount);
+	event Burned(address indexed notBribe, uint256 weiAmount);
 
 	struct Booking {
 		uint256 amountGwei;
@@ -66,5 +67,18 @@ contract Bookm3 is Ownable {
 		payee.sendValue(booking.amountGwei);
 
 		emit Refunded(payee, booking.amountGwei);
+	}
+
+	function burn(address payable notBribe, address payable payee, uint256 endtime) public virtual {
+		bytes32 index = _hashBooking(payee, endtime);
+		Booking memory booking = _bookings[index];
+
+		require( !booking.released || block.timestamp < endtime, "Does not meet conditions for burn");
+
+		_bookings[index] = Booking(0, 0, false);
+
+		notBribe.sendValue(booking.amountGwei);
+
+		emit Burned(notBribe, booking.amountGwei);
 	}
 }
