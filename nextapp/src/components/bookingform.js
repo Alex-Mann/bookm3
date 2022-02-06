@@ -1,9 +1,8 @@
 import dayjs from 'dayjs'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useMoralis } from 'react-moralis'
 import { ethers } from 'ethers';
-import Bookm3ABI from '../../../simple-escrow/artifacts/contracts/Bookm3.sol/Bookm3.json';
+import Bookm3ABI from '../../static/Bookm3.json';
 
 
 import { requestBooking } from '../models/UserSchedule'
@@ -14,23 +13,22 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { account, user, enableWeb3, web3, isWeb3Enabled } = useMoralis()
   const Bookm3ActualABI = Bookm3ABI.abi;
 
   const onSubmit = async (data) => {
-    let provider = null;
-    if (isWeb3Enabled) {
-      provider = web3;
-    }
-    else {
-      provider = await enableWeb3();
+    const { ethereum } = window;
+    if (!ethereum) {
+      console.warn("No Wallet, we need to do something about this");
+      return;
     }
 
     const durationSec = 30 * 60;
     const endtime = dayjs(selectedTime).unix() + durationSec;
+    const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
+    const signerAddress = await signer.getAddress();
     const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
-    const bookTx = await bookingContract.book(account, ethers.BigNumber.from(endtime), {value: ethers.utils.parseEther('0.001')});
+    const bookTx = await bookingContract.book(signerAddress, ethers.BigNumber.from(endtime), {value: ethers.utils.parseEther('0.001')});
     await bookTx.wait();
 
     // Chain stuff can be referenced by meetingTime + duration as well as the address of the meeter
@@ -41,10 +39,8 @@ export default function BookingForm({ selectedDay, selectedTime, acptUser }) {
       name: data.Name,
       email: data.Email,
       notes: data.Notes,
-      reqUser: user,
+      reqUser: signerAddress,
       acptUser: acptUser,
-      // TODO: add a field for the chain payload
-      // chainPayload: account,
     })
     console.log('data', data)
     console.log('time', selectedTime)

@@ -24,6 +24,7 @@ interface Bookm3Interface extends ethers.utils.Interface {
   functions: {
     "book(address,uint256)": FunctionFragment;
     "bookingsOf(address,uint256)": FunctionFragment;
+    "burn(address,address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "refund(address,uint256)": FunctionFragment;
     "release(address,uint256)": FunctionFragment;
@@ -38,6 +39,10 @@ interface Bookm3Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "bookingsOf",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "burn",
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -59,6 +64,7 @@ interface Bookm3Interface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "book", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "bookingsOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "refund", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
@@ -73,11 +79,13 @@ interface Bookm3Interface extends ethers.utils.Interface {
 
   events: {
     "Booked(address,uint256,uint256)": EventFragment;
+    "Burned(address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Refunded(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Booked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Burned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Refunded"): EventFragment;
 }
@@ -88,6 +96,10 @@ export type BookedEvent = TypedEvent<
     endtime: BigNumber;
     weiAmount: BigNumber;
   }
+>;
+
+export type BurnedEvent = TypedEvent<
+  [string, BigNumber] & { notBribe: string; weiAmount: BigNumber }
 >;
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -154,6 +166,13 @@ export class Bookm3 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    burn(
+      notBribe: string,
+      payee: string,
+      endtime: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     refund(
@@ -190,6 +209,13 @@ export class Bookm3 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  burn(
+    notBribe: string,
+    payee: string,
+    endtime: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   refund(
@@ -225,6 +251,13 @@ export class Bookm3 extends BaseContract {
       endtime: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    burn(
+      notBribe: string,
+      payee: string,
+      endtime: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -265,6 +298,22 @@ export class Bookm3 extends BaseContract {
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
       { payee: string; endtime: BigNumber; weiAmount: BigNumber }
+    >;
+
+    "Burned(address,uint256)"(
+      notBribe?: string | null,
+      weiAmount?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { notBribe: string; weiAmount: BigNumber }
+    >;
+
+    Burned(
+      notBribe?: string | null,
+      weiAmount?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { notBribe: string; weiAmount: BigNumber }
     >;
 
     "OwnershipTransferred(address,address)"(
@@ -313,6 +362,13 @@ export class Bookm3 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    burn(
+      notBribe: string,
+      payee: string,
+      endtime: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     refund(
@@ -348,6 +404,13 @@ export class Bookm3 extends BaseContract {
       payee: string,
       endtime: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    burn(
+      notBribe: string,
+      payee: string,
+      endtime: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;

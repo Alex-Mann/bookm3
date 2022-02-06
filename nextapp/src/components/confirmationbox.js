@@ -28,7 +28,7 @@ export default function ConfirmationBox({ selectedDay, selectedTime, id }) {
           <BookingForm
             selectedDay={selectedDay}
             selectedTime={selectedTime}
-            acptUser={"0xflaslkdfjsdlkfsflksadfjksjdf"}
+            acptUser={id}
           />
         </div>
       )}
