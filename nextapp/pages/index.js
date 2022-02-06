@@ -33,6 +33,7 @@ export default function Home() {
                 <ConfirmationBox
                   selectedDay={selectedDay}
                   selectedTime={selectedTime}
+                  id={"0x00000000000000000000000000000000"}
                 />
               </div>
               <TimePicker
