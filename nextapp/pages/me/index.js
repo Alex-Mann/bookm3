@@ -4,39 +4,48 @@ import { useMoralisQuery, useMoralis } from "react-moralis";
 import Nav from "../../src/components/nav";
 import { TimeSlot } from "../../src/components/timepicker";
 import { formatAddr } from "../../utils";
+import { ethers } from 'ethers';
+import Bookm3ABI from '../../static/Bookm3.json';
 
 export default function Me() {
   const { data, error, isLoading } = useMoralisQuery("UserSchedule");
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [valid, setValid] = useState("")
   const { isAuthenticated, user, enableWeb3, web3, isWeb3Enabled } = useMoralis();
+  const Bookm3ActualABI = Bookm3ABI.abi;
 
   const release = async (selectedTime, bookerAddress) => {
-    let provider = null;
-    if (isWeb3Enabled) {
-      provider = web3;
-    }
-    else {
-      provider = await enableWeb3();
+    console.log("releasing");
+    const { ethereum } = window;
+    if (!ethereum) {
+      console.warn("No Wallet, we need to do something about this");
+      return;
     }
     const durationSec = 30 * 60;
     const endtime = dayjs(selectedTime).unix() + durationSec;
+    console.log(bookerAddress);
+    console.log(endtime);
+    const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
     const bookTx = await bookingContract.release(bookerAddress, ethers.BigNumber.from(endtime));
     await bookTx.wait();
+    const refundTx = await bookingContract.refund(bookerAddress, ethers.BigNumber.from(endtime));
+    await refundTx.wait();
   };
 
   const burn = async (selectedTime, bookerAddress) => {
-    let provider = null;
-    if (isWeb3Enabled) {
-      provider = web3;
-    }
-    else {
-      provider = await enableWeb3();
+    console.log("burning")
+    const { ethereum } = window;
+    if (!ethereum) {
+      console.warn("No Wallet, we need to do something about this");
+      return;
     }
     const durationSec = 30 * 60;
     const endtime = dayjs(selectedTime).unix() + durationSec;
+    console.log(bookerAddress);
+    console.log(endtime);
+    const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
     const bookTx = await bookingContract.burn("0x000000000000000000000000000000000000dEaD", bookerAddress, ethers.BigNumber.from(endtime));
@@ -62,7 +71,7 @@ export default function Me() {
     );
 
   const prevMeetings = data
-    .filter((d) => d.get("status") === "COMPLETE")
+    // .filter((d) => d.get("status") === "COMPLETE")
     .filter((d) => d.get("acceptingUser") === valid)
     .filter((d) => dayjs().isAfter(d.get("meetingTime")));
 
