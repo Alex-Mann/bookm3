@@ -12,7 +12,7 @@ export default function CopyURL() {
       text={user.get("ethAddress")}
       onCopy={() => setCopied(true)}
     >
-      <button>{copied ? "Copied!" : "Get URL"}</button>
+      <button className="button__box">{copied ? "Copied!" : "Copy my invite URL"}</button>
     </CopyToClipboard>
   );
 }

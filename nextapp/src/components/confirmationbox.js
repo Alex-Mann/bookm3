@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import BookingForm from "./bookingform";
+import { formatAddr } from '../../utils'
 
 export default function ConfirmationBox({ selectedDay, selectedTime, id }) {
   return (
@@ -20,7 +21,7 @@ export default function ConfirmationBox({ selectedDay, selectedTime, id }) {
               <br />
               with
               <br />
-              {id.substring(0, 8)}...
+              {formatAddr(id)}
             </div>
           </div>
 
