@@ -9,7 +9,40 @@ export default function Me() {
   const { data, error, isLoading } = useMoralisQuery("UserSchedule");
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [valid, setValid] = useState("")
-  const { isAuthenticated, user } = useMoralis();
+  const { isAuthenticated, user, enableWeb3, web3, isWeb3Enabled } = useMoralis();
+
+  const release = async (selectedTime, bookerAddress) => {
+    let provider = null;
+    if (isWeb3Enabled) {
+      provider = web3;
+    }
+    else {
+      provider = await enableWeb3();
+    }
+    const durationSec = 30 * 60;
+    const endtime = dayjs(selectedTime).unix() + durationSec;
+    const signer = provider.getSigner();
+    const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
+    const bookTx = await bookingContract.release(bookerAddress, ethers.BigNumber.from(endtime));
+    await bookTx.wait();
+  };
+
+  const burn = async (selectedTime, bookerAddress) => {
+    let provider = null;
+    if (isWeb3Enabled) {
+      provider = web3;
+    }
+    else {
+      provider = await enableWeb3();
+    }
+    const durationSec = 30 * 60;
+    const endtime = dayjs(selectedTime).unix() + durationSec;
+    const signer = provider.getSigner();
+    const bookingContract = new ethers.Contract('0xB32b182414ac7C2311C4619db04ec5c6f968ee7F', Bookm3ActualABI, signer);
+    const bookTx = await bookingContract.burn("0x000000000000000000000000000000000000dEaD", bookerAddress, ethers.BigNumber.from(endtime));
+    await bookTx.wait();
+
+  }
 
   useEffect(() => {
     if(user) {
@@ -83,11 +116,11 @@ export default function Me() {
                         selectedMeeting.get("meetingTime")
                       ) && (
                         <div className="flex flex-col pt-8">
-                          <button className="bg-[#B4AAD0] text-white font-bold hover:bg-[#d1b9dc] transition-colors ">
+                          <button className="bg-[#B4AAD0] text-white font-bold hover:bg-[#d1b9dc] transition-colors " onClick={() => release(selectedMeeting.get("meetingTime"), selectedMeeting.get("requestingUser").get("ethAddress"))}>
                             return
                           </button>
                           or
-                          <button className="bg-[#B4AAD0] text-white font-bold hover:bg-[#d1b9dc] transition-colors">
+                          <button className="bg-[#B4AAD0] text-white font-bold hover:bg-[#d1b9dc] transition-colors" onClick={() => burn(selectedMeeting.get("meetingTime"), selectedMeeting.get("requestingUser").get("ethAddress"))}>
                             burn
                           </button>
                         </div>
